@@ -12,7 +12,7 @@ import * as Api from "../service/api"
 
 type FormInputs = {
   name: string,
-  message: string,
+  comment: string,
 };
 
 const Responce = styled.div`
@@ -86,7 +86,7 @@ const ErrorMsg = styled.span`
 type PostType = {
   id: number;
   name: string;
-  message: string;
+  comment: string;
   ip: string;
   week: string;
   created_at: string;
@@ -118,7 +118,7 @@ const Thread: React.FC =  () => {
     // .catch(res => {
     //   console.log(res)
     // })
-    Api.addBbs(data.name, data.message);
+    Api.addBbs(data.name, data.comment);
   };
 
   const classes = useStyles();
@@ -147,7 +147,7 @@ const Thread: React.FC =  () => {
                   <span>ID:{post.ip}</span>
                 </div>
                 <Message>
-                  <span>{post.message}</span>
+                  <span>{post.comment}</span>
                 </Message>
               </Post>
               </div>
@@ -158,8 +158,8 @@ const Thread: React.FC =  () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               {errors.name && <ErrorMsg>名前が長すぎます！</ErrorMsg>}
               <Name {...register("name", { maxLength: 20 })} placeholder={'名前(省略可)'} size={70} />
-              {errors.message && <ErrorMsg>本文がありません！</ErrorMsg>}
-              <MessageArea {...register("message", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
+              {errors.comment && <ErrorMsg>本文がありません！</ErrorMsg>}
+              <MessageArea {...register("comment", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
               <Write variant="contained" color="primary" className={classes.button} endIcon={<CreateIcon/>} type='submit'>書き込む</Write>
             </form>
           </Responce>
