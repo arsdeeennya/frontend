@@ -7,6 +7,8 @@ import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from "react-hook-form";
 import Moment from 'react-moment';
+import * as Api from "../service/api"
+
 
 type FormInputs = {
   name: string,
@@ -96,7 +98,7 @@ const Main = styled.main`
 `
 
 const Thread: React.FC =  () => {
-  const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormInputs>();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
   const [posts, setPosts] = useState<Array<PostType>>([]);
   
@@ -104,26 +106,27 @@ const Thread: React.FC =  () => {
     if(data.name === ''){
       data.name = '名無しさん'
     }
-    axios.post('http://127.0.0.1:8000/bbs/index/', data,{
-      headers: { "Content-Type": "application/json" },
-    })
-    .then(res => {
-      setPosts(prevPosts => [...prevPosts,res.data])
-      setValue('name', '')
-      setValue('message', '')
-      e.target.reset();
-    })
-    .catch(res => {
-      console.log(res)
-    })
+    // axios.post('http://127.0.0.1:8000/bbs/index/', data,{
+    //   headers: { "Content-Type": "application/json" },
+    // })
+    // .then(res => {
+    //   setPosts(prevPosts => [...prevPosts,res.data])
+    //   setValue('name', '')
+    //   setValue('message', '')
+    //   e.target.reset();
+    // })
+    // .catch(res => {
+    //   console.log(res)
+    // })
+    Api.addBbs(data.name, data.message);
   };
 
   const classes = useStyles();
 
-  useEffect(() => {
-    axios.get<Array<PostType>>('http://127.0.0.1:8000/bbs/index/')
-      .then((res) => setPosts(res.data));
-  }, []);
+  // useEffect(() => {
+  //   axios.get<Array<PostType>>('http://127.0.0.1:8000/bbs/index/')
+  //     .then((res) => setPosts(res.data));
+  // }, []);
 
   return (
     <React.Fragment>
