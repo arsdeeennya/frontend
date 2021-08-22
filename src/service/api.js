@@ -10,20 +10,20 @@ export const addBbs = (name, comment) => {
   })
 }
 
-export const initGet = async(uid) => {
-  const todo = await db.collection("todo")
-  .orderBy("createdAt", "desc")
-  .where("uid", "==", uid);
+export const initGet = async() => {
+  const bbs = await db.collection("bbs")
+  .orderBy("created_at", "asc");
 
-  return todo.get().then((snapShot) => {
-    let todos = [];
+  return bbs.get().then((snapShot) => {
+    let bbss = [];
     snapShot.forEach((doc) => {
-      todos.push({
-        id: doc.id,
-        content: doc.data().content,
-        isComplete: doc.data().isComplete,
+      bbss.push({
+        name: doc.data().name,
+        comment: doc.data().comment,
+        created_at: doc.data().created_at,
+        ip: doc.data().ip,
       });
     });
-    return todos;
+    return bbss ;
   });
 }

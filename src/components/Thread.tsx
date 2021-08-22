@@ -123,6 +123,15 @@ const Thread: React.FC =  () => {
 
   const classes = useStyles();
 
+  useEffect(()=>{
+    // Todo一覧を取得
+    fetch();
+  }, [])
+
+  const fetch = async() => {
+      const data = await Api.initGet();
+      await setPosts(data);
+  }
   // useEffect(() => {
   //   axios.get<Array<PostType>>('http://127.0.0.1:8000/bbs/index/')
   //     .then((res) => setPosts(res.data));
