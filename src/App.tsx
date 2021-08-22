@@ -7,6 +7,7 @@ import Thread from './components/Thread';
 import {Chat} from './components/Chat';
 import Dev from './components/Dev';
 import { Route, BrowserRouter } from "react-router-dom";
+import './service/firebase';
 
 function App() {
   return (
