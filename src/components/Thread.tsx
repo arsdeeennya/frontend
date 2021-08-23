@@ -165,7 +165,7 @@ const Thread: React.FC =  () => {
           <Responce>
             <ResPost>レスを投稿する</ResPost>
             <form onSubmit={handleSubmit(onSubmit)}>
-              {errors.name && <ErrorMsg>名前が長すぎます！</ErrorMsg>}
+              {errors.name && <ErrorMsg>名前が長すぎます！!!!!!</ErrorMsg>}
               <Name {...register("name", { maxLength: 20 })} placeholder={'名前(省略可)'} size={70} />
               {errors.comment && <ErrorMsg>本文がありません！</ErrorMsg>}
               <MessageArea {...register("comment", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
