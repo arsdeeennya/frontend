@@ -12,6 +12,7 @@ export const initGet = async() => {
         created_at: doc.created_at,
       });
     });
+    console.log(bbss);
     return bbss ;
   });
 }
