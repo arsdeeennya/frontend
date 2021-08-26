@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import axios from "axios";
 import Button from '@material-ui/core/Button';
 import CreateIcon from '@material-ui/icons/Create';
 import Container from '@material-ui/core/Container';
@@ -8,6 +7,8 @@ import styled from 'styled-components';
 import { useForm, SubmitHandler } from "react-hook-form";
 import Moment from 'react-moment';
 import * as Api from "../service/api"
+import firebase from "firebase";
+import { db } from "../service/firebase"
 
 
 type FormInputs = {
@@ -84,11 +85,8 @@ const ErrorMsg = styled.span`
 `
 
 type PostType = {
-  id: number;
   name: string;
   comment: string;
-  ip: string;
-  week: string;
   created_at: string;
 }
 
@@ -98,7 +96,7 @@ const Main = styled.main`
 `
 
 const Thread: React.FC =  () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
+  const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
   const [posts, setPosts] = useState<Array<PostType>>([]);
   
@@ -106,25 +104,25 @@ const Thread: React.FC =  () => {
     if(data.name === ''){
       data.name = '名無しさん'
     }
-    // axios.post('http://127.0.0.1:8000/bbs/index/', data,{
-    //   headers: { "Content-Type": "application/json" },
-    // })
-    // .then(res => {
-    //   setPosts(prevPosts => [...prevPosts,res.data])
-    //   setValue('name', '')
-    //   setValue('message', '')
-    //   e.target.reset();
-    // })
-    // .catch(res => {
-    //   console.log(res)
-    // })
-    Api.addBbs(data.name, data.comment);
+    db.collection("bbs").add({
+      name: data.name,
+      comment: data.comment,
+      created_at: firebase.firestore.FieldValue.serverTimestamp(),
+    })
+    .then((res) => {
+      fetch();
+      setValue('name', '')
+      setValue('comment', '')
+      e.target.reset();
+    })
+    .catch((res) => {
+      console.log(res)
+    });
   };
 
   const classes = useStyles();
 
   useEffect(()=>{
-    // Todo一覧を取得
     fetch();
   }, [])
 
@@ -132,10 +130,6 @@ const Thread: React.FC =  () => {
       const data = await Api.initGet();
       await setPosts(data);
   }
-  // useEffect(() => {
-  //   axios.get<Array<PostType>>('http://127.0.0.1:8000/bbs/index/')
-  //     .then((res) => setPosts(res.data));
-  // }, []);
 
   return (
     <React.Fragment>
@@ -146,14 +140,13 @@ const Thread: React.FC =  () => {
               <div key={index}>
                 <Post>
                 <div>
-                  <span>{post.id}.  </span>
+                  <span>{index+1}.  </span>
                   <span>
                     <Bold>{post.name} </Bold>
                   </span>
                   <Moment format="YYYY年MM月DD日 HH:mm:ss ">
                     {post.created_at}
                   </Moment>
-                  <span>ID:{post.ip}</span>
                 </div>
                 <Message>
                   <span>{post.comment}</span>
