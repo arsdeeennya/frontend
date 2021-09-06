@@ -6,7 +6,7 @@ type PostType = {
   created_at: any;
 }
 
-export const initGet = async() => {
+export const bbsGet = async() => {
   const bbs = await db.collection("bbs").orderBy("created_at", "asc");
   return bbs.get().then((snapShot) => {
     let bbss:PostType[] = [];

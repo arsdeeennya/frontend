@@ -1,15 +1,29 @@
-import React, {useState} from 'react';
+import React, {Dispatch, SetStateAction } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CreateIcon from '@material-ui/icons/Create';
-import styled from 'styled-components'
-import axios from "axios";
+import styled from 'styled-components';
+import { useForm, SubmitHandler } from "react-hook-form";
+import { bbsGet } from "../service/api"
+import firebase from "firebase/app"
+import "firebase/firestore"
+import { db } from "../service/firebase"
 
+type FormInputs = {
+  name: string,
+  comment: string,
+};
+
+type PostType = {
+  name: string;
+  comment: string;
+  created_at: any;
+}
 
 const Responce = styled.div`
   margin: 90px 110px 0px;
 `
-const Post = styled.div`
+const ResPost = styled.div`
   font-size: 20px;
   font-weight: 700;
   margin-top: 20px;
@@ -26,7 +40,7 @@ const Name = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
 `
-const Comment = styled.textarea`
+const CommentArea = styled.textarea`
   width: 100%;
   font-size: 170%;
   padding: 8px 14px;
@@ -46,47 +60,53 @@ const useStyles = makeStyles((theme: Theme) =>
     button: {
       margin: theme.spacing(1),
     },
+    root: {
+      flexGrow: 1,
+    },
   }),
 );
 
-const ThreadForm: React.FC =  () => {
-  const [name, setName] = useState('');
-  const [comment, setComment] = useState('');
+const ErrorMsg = styled.span`
+  color: deeppink;
+  font-weight: 700;
+`
+
+const ThreadForm: React.FC<{ setPosts: Dispatch<SetStateAction<Array<PostType>>> }>   =  (props) => {
   const classes = useStyles();
-
-  const nameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value)
-  }
-
-  const commentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setComment(e.target.value)
-  }
-
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const post = {
-      name: name,
-      message: comment
+  const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormInputs>();
+  const onSubmit: SubmitHandler<FormInputs> = (data: FormInputs) => {
+    if(data.name === ''){
+      data.name = '名無しさん'
     }
-
-    axios.post('http://127.0.0.1:8000/bbs/index/', post,{
-      headers: { "Content-Type": "application/json" },
+    db.collection("bbs").add({
+      name: data.name,
+      comment: data.comment,
+      created_at: firebase.firestore.FieldValue.serverTimestamp(),
     })
-    .then(res => {
-      console.log(res);
+    .then((res) => {
+      setValue('name', '')
+      setValue('comment', '')
+      fetch()
     })
-    .catch(res => {
+    .catch((res) => {
       console.log(res)
-    })
+    });
+  };
+
+  const fetch = async() => {
+    const data = await bbsGet();
+    props.setPosts(data);
   }
 
   return (
     <React.Fragment>
       <Responce>
-        <Post>レスを投稿する</Post>
-        <form onSubmit={submit} >
-          <Name placeholder={'名前(省略可)'} size={70} name="name" value={name} onChange={nameChange}/>
-          <Comment placeholder={'コメント内容'} rows={5} cols={70} name="message" value={comment} onChange={commentChange}/>
+        <ResPost>レスを投稿する</ResPost>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {errors.name && <ErrorMsg>名前が長すぎます！</ErrorMsg>}
+          <Name {...register("name", { maxLength: 20 })} placeholder={'名前(省略可)'} size={70} />
+          {errors.comment && <ErrorMsg>本文がありません！</ErrorMsg>}
+          <CommentArea {...register("comment", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
           <Write variant="contained" color="primary" className={classes.button} endIcon={<CreateIcon/>} type='submit'>書き込む</Write>
         </form>
       </Responce>

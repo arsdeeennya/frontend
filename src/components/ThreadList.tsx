@@ -1,7 +1,35 @@
-import React, {useState, useEffect} from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import axios from "axios";
-import styled from 'styled-components'
+import React, { useEffect } from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import styled from 'styled-components';
+import Moment from 'react-moment';
+import * as Api from "../service/api"
+import "firebase/firestore"
+
+type PostType = {
+  name: string;
+  comment: string;
+  created_at: any;
+}
+
+interface PROPS {
+  posts: PostType[];
+  setPosts: any;
+}
+
+const Bold = styled.b`
+  color: #3f51b5;
+`
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    button: {
+      margin: theme.spacing(1),
+    },
+    root: {
+      flexGrow: 1,
+    },
+  }),
+);
 
 const Post = styled.div`
   font-size: 20px;
@@ -9,58 +37,44 @@ const Post = styled.div`
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 5px;
-  display: inline-block;
   border-style: none solid solid none;
   border-color: #ddd;
 `
-const Message = styled.div`
+const Comment = styled.div`
   padding: 12px 0px;
 `
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      flexGrow: 1,
-    },
-  }),
-);
-
-type PostType = {
-  id: number;
-  name: string;
-  message: string;
-  ip: string;
-  week: string;
-}
-
-const ThreadList: React.FC =  () => {
-  const [posts, setPosts] = useState<Array<PostType>>([]);
+const ThreadList: React.FC<PROPS> = (props) => {
   const classes = useStyles();
 
-  useEffect(() => {
-    axios.get<Array<PostType>>('http://127.0.0.1:8000/bbs/index/')
-      .then((res) => {setPosts(res.data)})
-      .catch((res) => {console.log(res)})
-  }, []);
+  useEffect(()=>{
+    fetch();
+  }, [])
+
+  const fetch = async() => {
+    const data = await Api.bbsGet();
+    props.setPosts(data);
+  }
 
   return (
     <React.Fragment>
       <div className={classes.root}>
-        {posts.map((post, index) => (
+        {props.posts.map((post:PostType , index: number) => (
           <div key={index}>
             <Post>
             <div>
-              <span>{post.id}</span>
+              <span>{index+1}.  </span>
               <span>
-                <b><a href="mailto:sage">{post.name}</a></b>
+                <Bold>{post.name} </Bold>
               </span>
-              <span>2021/05/24(月) 12:55:00.32</span>
-              <span>{post.ip}</span>
+              <Moment format="YYYY年MM月DD日 HH:mm:ss ">
+                {new Date(post.created_at?.toDate()).toLocaleString()}
+              </Moment>
             </div>
-            <Message>
-              <span>{post.message}</span>
-            </Message>
-           </Post>
+            <Comment>
+              <span>{post.comment}</span>
+            </Comment>
+          </Post>
           </div>
         ))}
       </div>
