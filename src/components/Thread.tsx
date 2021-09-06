@@ -44,7 +44,7 @@ const Name = styled.input`
   border: 1px solid #ccc;
   border-radius: 5px;
 `
-const MessageArea = styled.textarea`
+const CommentArea = styled.textarea`
   width: 100%;
   font-size: 170%;
   padding: 8px 14px;
@@ -83,7 +83,7 @@ const Post = styled.div`
   border-style: none solid solid none;
   border-color: #ddd;
 `
-const Message = styled.div`
+const Comment = styled.div`
   padding: 12px 0px;
 `
 
@@ -98,11 +98,13 @@ const Main = styled.main`
 `
 
 const Thread: React.FC =  () => {
+  const classes = useStyles();
+
   const { register, setValue, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
   const [posts, setPosts] = useState<Array<PostType>>([]);
   
-  const onSubmit: SubmitHandler<FormInputs> = (data: FormInputs, e: any) => {
+  const onSubmit: SubmitHandler<FormInputs> = (data: FormInputs) => {
     if(data.name === ''){
       data.name = '名無しさん'
     }
@@ -115,14 +117,11 @@ const Thread: React.FC =  () => {
       fetch();
       setValue('name', '')
       setValue('comment', '')
-      e.target.reset();
     })
     .catch((res) => {
       console.log(res)
     });
   };
-
-  const classes = useStyles();
 
   useEffect(()=>{
     fetch();
@@ -130,7 +129,7 @@ const Thread: React.FC =  () => {
 
   const fetch = async() => {
       const data = await Api.initGet();
-      await setPosts(data);
+      setPosts(data);
   }
 
   return (
@@ -150,9 +149,9 @@ const Thread: React.FC =  () => {
                     {new Date(post.created_at?.toDate()).toLocaleString()}
                   </Moment>
                 </div>
-                <Message>
+                <Comment>
                   <span>{post.comment}</span>
-                </Message>
+                </Comment>
               </Post>
               </div>
             ))}
@@ -163,7 +162,7 @@ const Thread: React.FC =  () => {
               {errors.name && <ErrorMsg>名前が長すぎます！</ErrorMsg>}
               <Name {...register("name", { maxLength: 20 })} placeholder={'名前(省略可)'} size={70} />
               {errors.comment && <ErrorMsg>本文がありません！</ErrorMsg>}
-              <MessageArea {...register("comment", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
+              <CommentArea {...register("comment", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
               <Write variant="contained" color="primary" className={classes.button} endIcon={<CreateIcon/>} type='submit'>書き込む</Write>
             </form>
           </Responce>
