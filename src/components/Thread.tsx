@@ -1,17 +1,28 @@
 import React, {useState, useEffect} from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import axios from "axios";
 import Button from '@material-ui/core/Button';
 import CreateIcon from '@material-ui/icons/Create';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
 import { useForm, SubmitHandler } from "react-hook-form";
 import Moment from 'react-moment';
+import * as Api from "../service/api"
+import firebase from "firebase/app"
+import "firebase/auth"
+import "firebase/firestore"
+import { db } from "../service/firebase"
+
 
 type FormInputs = {
   name: string,
-  message: string,
+  comment: string,
 };
+
+type PostType = {
+  name: string;
+  comment: string;
+  created_at: any;
+}
 
 const Responce = styled.div`
   margin: 90px 110px 0px;
@@ -81,15 +92,6 @@ const ErrorMsg = styled.span`
   font-weight: 700;
 `
 
-type PostType = {
-  id: number;
-  name: string;
-  message: string;
-  ip: string;
-  week: string;
-  created_at: string;
-}
-
 const Main = styled.main`
   background-color: #f2f3f7;
   padding: 70px 0px 100px;
@@ -104,26 +106,32 @@ const Thread: React.FC =  () => {
     if(data.name === ''){
       data.name = '名無しさん'
     }
-    axios.post('http://127.0.0.1:8000/bbs/index/', data,{
-      headers: { "Content-Type": "application/json" },
+    db.collection("bbs").add({
+      name: data.name,
+      comment: data.comment,
+      created_at: firebase.firestore.FieldValue.serverTimestamp(),
     })
-    .then(res => {
-      setPosts(prevPosts => [...prevPosts,res.data])
+    .then((res) => {
+      fetch();
       setValue('name', '')
-      setValue('message', '')
+      setValue('comment', '')
       e.target.reset();
     })
-    .catch(res => {
+    .catch((res) => {
       console.log(res)
-    })
+    });
   };
 
   const classes = useStyles();
 
-  useEffect(() => {
-    axios.get<Array<PostType>>('http://127.0.0.1:8000/bbs/index/')
-      .then((res) => setPosts(res.data));
-  }, []);
+  useEffect(()=>{
+    fetch();
+  }, [])
+
+  const fetch = async() => {
+      const data = await Api.initGet();
+      await setPosts(data);
+  }
 
   return (
     <React.Fragment>
@@ -134,17 +142,16 @@ const Thread: React.FC =  () => {
               <div key={index}>
                 <Post>
                 <div>
-                  <span>{post.id}.  </span>
+                  <span>{index+1}.  </span>
                   <span>
                     <Bold>{post.name} </Bold>
                   </span>
                   <Moment format="YYYY年MM月DD日 HH:mm:ss ">
-                    {post.created_at}
+                    {new Date(post.created_at?.toDate()).toLocaleString()}
                   </Moment>
-                  <span>ID:{post.ip}</span>
                 </div>
                 <Message>
-                  <span>{post.message}</span>
+                  <span>{post.comment}</span>
                 </Message>
               </Post>
               </div>
@@ -155,8 +162,8 @@ const Thread: React.FC =  () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               {errors.name && <ErrorMsg>名前が長すぎます！</ErrorMsg>}
               <Name {...register("name", { maxLength: 20 })} placeholder={'名前(省略可)'} size={70} />
-              {errors.message && <ErrorMsg>本文がありません！</ErrorMsg>}
-              <MessageArea {...register("message", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
+              {errors.comment && <ErrorMsg>本文がありません！</ErrorMsg>}
+              <MessageArea {...register("comment", { required: true })} placeholder={'コメント内容'} rows={5} cols={70} />
               <Write variant="contained" color="primary" className={classes.button} endIcon={<CreateIcon/>} type='submit'>書き込む</Write>
             </form>
           </Responce>
