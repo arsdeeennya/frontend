@@ -7,7 +7,9 @@ import styled from 'styled-components';
 import { useForm, SubmitHandler } from "react-hook-form";
 import Moment from 'react-moment';
 import * as Api from "../service/api"
-import firebase from "firebase";
+import firebase from "firebase/app"
+import "firebase/auth"
+import "firebase/firestore"
 import { db } from "../service/firebase"
 
 
@@ -15,6 +17,12 @@ type FormInputs = {
   name: string,
   comment: string,
 };
+
+type PostType = {
+  name: string;
+  comment: string;
+  created_at: any;
+}
 
 const Responce = styled.div`
   margin: 90px 110px 0px;
@@ -84,12 +92,6 @@ const ErrorMsg = styled.span`
   font-weight: 700;
 `
 
-type PostType = {
-  name: string;
-  comment: string;
-  created_at: string;
-}
-
 const Main = styled.main`
   background-color: #f2f3f7;
   padding: 70px 0px 100px;
@@ -145,7 +147,7 @@ const Thread: React.FC =  () => {
                     <Bold>{post.name} </Bold>
                   </span>
                   <Moment format="YYYY年MM月DD日 HH:mm:ss ">
-                    {post.created_at}
+                    {new Date(post.created_at?.toDate()).toLocaleString()}
                   </Moment>
                 </div>
                 <Message>
