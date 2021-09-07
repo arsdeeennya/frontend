@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from './Footer';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
@@ -96,6 +97,7 @@ const Home: React.FC =  () => {
           </Container>
         </div>
       </Main>
+      <Footer/>
     </React.Fragment>
   );
 }

@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
 const Auth: React.FC = () => {
   const classes = useStyles();
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
@@ -129,12 +129,12 @@ const Auth: React.FC = () => {
       displayName: username,
       photoURL: url,
     });
-    // dispatch(
-    //   updateUserProfile({
-    //     displayName: username,
-    //     photoUrl: url,
-    //   })
-    // );
+    dispatch(
+      updateUserProfile({
+        displayName: username,
+        photoUrl: url,
+      })
+    );
   };
 
   return (

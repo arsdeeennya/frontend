@@ -1,7 +1,6 @@
 import React from 'react';
 import './index.css';
 import Header from './components/Header';
-import Footer from './components/Footer';
 import Home from './components/Home';
 import Thread from './components/Thread';
 import Chat from './components/Chat';
@@ -14,12 +13,11 @@ function App() {
   <React.StrictMode>
     <BrowserRouter>　
       <Header/>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/thread" component={Thread} />
-        <Route exact path="/chat" component={Chat} />
-        <Route exact path="/auth" component={Auth} />
-        <Route exact path="/dev" component={Dev} />
-      <Footer/>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/thread" component={Thread} />
+      <Route exact path="/chat" component={Chat} />
+      <Route exact path="/auth" component={Auth} />
+      <Route exact path="/dev" component={Dev} />
     </BrowserRouter>
   </React.StrictMode>
   );

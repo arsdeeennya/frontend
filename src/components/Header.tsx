@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -116,6 +116,7 @@ const Header: React.FC =  () => {
     setOpen(false);
   };
 
+  
   const cards= [{title: '掲示板', icon: <CommentIcon fontSize="large"/>, url: '/thread'},
                 {title: 'チャット', icon: <ForumIcon fontSize="large"/>, url: '/chat'},
                 {title: 'ログイン', icon: <ExitToAppIcon fontSize="large"/>, url: '/auth'}];
