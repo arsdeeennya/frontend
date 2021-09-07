@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -42,7 +42,8 @@ const Header: React.FC =  () => {
     textDecorationNone: {
       textDecoration: 'none',
       fontWeight: 'bold',
-      color: 'white'
+      color: 'white',
+      flexGrow: 1,
     },
     header: {
       textDecoration: 'none',
@@ -89,8 +90,6 @@ const Header: React.FC =  () => {
       justifyContent: 'center',
       backgroundColor: '#3f51b5',
     },
-    contentShift: {
-    },
   }));
 
   const classes = useStyles();
@@ -116,7 +115,6 @@ const Header: React.FC =  () => {
     setOpen(false);
   };
 
-  
   const cards= [{title: '掲示板', icon: <CommentIcon fontSize="large"/>, url: '/thread'},
                 {title: 'チャット', icon: <ForumIcon fontSize="large"/>, url: '/chat'},
                 {title: 'ログイン', icon: <ExitToAppIcon fontSize="large"/>, url: '/auth'}];
@@ -125,9 +123,6 @@ const Header: React.FC =  () => {
     <React.Fragment>
       <AppBar
         position="fixed"
-        className={clsx({
-          [classes.contentShift]: open,
-        })}
       >
         <Toolbar>
           <IconButton
@@ -141,6 +136,9 @@ const Header: React.FC =  () => {
           </IconButton>
           <Title to="/" className={classes.textDecorationNone}>
             {title}
+          </Title>
+          <Title to="/auth">
+            ログイン
           </Title>
         </Toolbar>
       </AppBar>
