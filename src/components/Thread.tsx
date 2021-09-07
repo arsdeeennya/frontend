@@ -1,8 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import Container from '@material-ui/core/Container';
 import styled from 'styled-components';
-import * as Api from "../service/api"
-import "firebase/firestore"
 import ThreadList from "./ThreadList"
 import ThreadForm from "./ThreadForm"
 
@@ -21,16 +19,6 @@ const Main = styled.main`
 const Thread: React.FC =  () => {
 
   const [posts, setPosts] = useState<Array<PostType>>([]);
-  
-
-  useEffect(()=>{
-    fetch();
-  }, [])
-
-  const fetch = async() => {
-    const data = await Api.bbsGet();
-    setPosts(data);
-  }
 
   return (
     <React.Fragment>

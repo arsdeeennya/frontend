@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, Dispatch, SetStateAction } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import styled from 'styled-components';
 import Moment from 'react-moment';
-import * as Api from "../service/api"
-import "firebase/firestore"
+import { bbsGet } from "../service/api"
 
 type PostType = {
   name: string;
@@ -11,9 +10,9 @@ type PostType = {
   created_at: any;
 }
 
-interface PROPS {
+type PROPS = {
   posts: PostType[];
-  setPosts: any;
+  setPosts: Dispatch<SetStateAction<Array<PostType>>>;
 }
 
 const Bold = styled.b`
@@ -47,14 +46,20 @@ const Comment = styled.div`
 const ThreadList: React.FC<PROPS> = (props) => {
   const classes = useStyles();
 
+  const fetch = useCallback(
+    async() => {
+      const data = await bbsGet();
+      props.setPosts(data);
+    },
+    [props],
+  )
+  
   useEffect(()=>{
     fetch();
-  }, [])
-
-  const fetch = async() => {
-    const data = await Api.bbsGet();
-    props.setPosts(data);
-  }
+    return () => {
+      // Unmount時の処理を記述
+    }; 
+  }, [fetch])
 
   return (
     <React.Fragment>
