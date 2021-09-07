@@ -112,6 +112,7 @@ const Header: React.FC =  () => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
+    setTitle('海外移住ちゃんねる');
     setOpen(false);
   };
 

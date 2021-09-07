@@ -1,7 +1,7 @@
 import ForumIcon from '@material-ui/icons/Forum';
 
 
-export const Chat = () => {
+const Chat: React.FC =  () => {
   return (
 
     <h1 style={{textAlign: 'center', color: '#3f51b5'}}>
@@ -9,3 +9,5 @@ export const Chat = () => {
     </h1>
   )
 }
+
+export default Chat;
