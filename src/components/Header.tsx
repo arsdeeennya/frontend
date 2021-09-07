@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import Modal from "react-modal";
 import ForumIcon from '@material-ui/icons/Forum';
 import MenuIcon from '@material-ui/icons/Menu';
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -20,11 +20,7 @@ Modal.setAppElement("#root");
 
 const drawerWidth = 240;
 
-const BbsButton = styled(Button)`
-  font-size: 20px;
-  padding: 15px 103px 15px 36px;
-`
-const ChatButton = styled(Button)`
+const DrawerButton = styled(Button)`
   font-size: 20px;
   padding: 15px 82px 15px 36px;
 `
@@ -112,6 +108,14 @@ const Header: React.FC =  () => {
     setTitle('海外移住ちゃんねる');
   };
 
+  const toggleDrawer = () => (event: any) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <React.Fragment>
       <AppBar
@@ -142,6 +146,7 @@ const Header: React.FC =  () => {
         anchor="left"
         transitionDuration={300}
         open={open}
+        onClose={toggleDrawer()}
         classes={{
           paper: classes.drawerPaper,
         }}
@@ -156,14 +161,19 @@ const Header: React.FC =  () => {
         </div>
         <List>
           <Link to="/thread" onClick={handleDrawerClose} className={classes.header}>
-            <BbsButton startIcon={<CommentIcon style={{ fontSize: 35 }}/>}>
-            掲示板
-            </BbsButton>
+            <DrawerButton startIcon={<CommentIcon style={{ fontSize: 35 }}/>}>
+              掲示板
+            </DrawerButton>
           </Link>
           <Link to="/chat" onClick={handleDrawerClose} className={classes.header}>
-            <ChatButton startIcon={<ForumIcon style={{ fontSize: 35 }}/>}>
+            <DrawerButton startIcon={<ForumIcon style={{ fontSize: 35 }}/>}>
               チャット
-            </ChatButton>
+            </DrawerButton>
+          </Link>
+          <Link to="/login" onClick={handleDrawerClose} className={classes.header}>
+            <DrawerButton startIcon={<ExitToAppIcon style={{ fontSize: 35 }}/>}>
+              ログイン
+            </DrawerButton>
           </Link>
         </List>
       </Drawer>
