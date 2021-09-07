@@ -112,9 +112,12 @@ const Header: React.FC =  () => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-
     setOpen(false);
   };
+
+  const cards= [{title: '掲示板', icon: <CommentIcon fontSize="large"/>, url: '/thread'},
+                {title: 'チャット', icon: <ForumIcon fontSize="large"/>, url: '/chat'},
+                {title: 'ログイン', icon: <ExitToAppIcon fontSize="large"/>, url: '/login'}];
 
   return (
     <React.Fragment>
@@ -160,21 +163,13 @@ const Header: React.FC =  () => {
           </Link>
         </div>
         <List>
-          <Link to="/thread" onClick={handleDrawerClose} className={classes.header}>
-            <DrawerButton startIcon={<CommentIcon style={{ fontSize: 35 }}/>}>
-              掲示板
-            </DrawerButton>
-          </Link>
-          <Link to="/chat" onClick={handleDrawerClose} className={classes.header}>
-            <DrawerButton startIcon={<ForumIcon style={{ fontSize: 35 }}/>}>
-              チャット
-            </DrawerButton>
-          </Link>
-          <Link to="/login" onClick={handleDrawerClose} className={classes.header}>
-            <DrawerButton startIcon={<ExitToAppIcon style={{ fontSize: 35 }}/>}>
-              ログイン
-            </DrawerButton>
-          </Link>
+          {cards.map((card, index: number) => (
+            <Link to={card.url} onClick={handleDrawerClose} className={classes.header} key={index}>
+              <DrawerButton startIcon={card.icon}>
+                {card.title}
+              </DrawerButton>
+            </Link>
+          ))}
         </List>
       </Drawer>
 
