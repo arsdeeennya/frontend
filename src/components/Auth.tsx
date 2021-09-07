@@ -271,7 +271,7 @@ const Auth: React.FC = () => {
             <Button
               fullWidth
               variant="contained"
-              color="default"
+              color="primary"
               className={classes.submit}
               startIcon={<CameraIcon />}
               onClick={signInGoogle}

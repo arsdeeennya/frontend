@@ -10,7 +10,6 @@ import styled from 'styled-components'
 import Modal from "react-modal";
 import ForumIcon from '@material-ui/icons/Forum';
 import MenuIcon from '@material-ui/icons/Menu';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
@@ -116,8 +115,7 @@ const Header: React.FC =  () => {
   };
 
   const cards= [{title: '掲示板', icon: <CommentIcon fontSize="large"/>, url: '/thread'},
-                {title: 'チャット', icon: <ForumIcon fontSize="large"/>, url: '/chat'},
-                {title: 'ログイン', icon: <ExitToAppIcon fontSize="large"/>, url: '/auth'}];
+                {title: 'チャット', icon: <ForumIcon fontSize="large"/>, url: '/chat'}];
 
   return (
     <React.Fragment>
