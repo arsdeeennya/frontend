@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { updateUserProfile } from "../features/userSlice";
 import styles from "./Auth.module.css";
 import { auth, provider, storage } from "../service/firebase";
+import { FcGoogle } from "react-icons/fc"
+import { FaFacebook, FaTwitter } from "react-icons/fa"
 
 import {
   Avatar,
@@ -19,7 +21,6 @@ import {
 } from "@material-ui/core";
 
 import SendIcon from "@material-ui/icons/Send";
-import CameraIcon from "@material-ui/icons/Camera";
 import EmailIcon from "@material-ui/icons/Email";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -273,7 +274,27 @@ const Auth: React.FC = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              startIcon={<CameraIcon />}
+              startIcon={<FcGoogle />}
+              onClick={signInGoogle}
+            >
+              SignIn with Google
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              startIcon={<FaFacebook />}
+              onClick={signInGoogle}
+            >
+              SignIn with Google
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              startIcon={<FaTwitter />}
               onClick={signInGoogle}
             >
               SignIn with Google
