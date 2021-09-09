@@ -162,12 +162,12 @@ const Header: React.FC = () => {
           </Title>
           {user.uid ? (
             <Avatar
-            className={classes.avatar}
-            src={user.photoUrl}
-            onClick={async () => {
-              await auth.signOut();
-            }}
-          />
+              className={classes.avatar}
+              src={user.photoUrl}
+              onClick={async () => {
+                await auth.signOut();
+              }}
+            />
           ) : (
             <Title to="/auth">ログイン</Title>
           )}
