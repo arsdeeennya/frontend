@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import CommentIcon from '@material-ui/icons/Comment';
@@ -14,6 +14,10 @@ import clsx from 'clsx';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import IconButton from '@material-ui/core/IconButton';
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, login, logout } from "../features/userSlice";
+import { auth } from "../service/firebase";
+
 
 Modal.setAppElement("#root");
 
@@ -93,6 +97,28 @@ const Header: React.FC =  () => {
 
   const classes = useStyles();
 
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unSub = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        dispatch(
+          login({
+            uid: authUser.uid,
+            photoUrl: authUser.photoURL,
+            displayName: authUser.displayName,
+          })
+        );
+      } else {
+        dispatch(logout());
+      }
+    });
+    return () => {
+      unSub();
+    };
+  }, [dispatch]);
+
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState('海外移住ちゃんねる');
 
@@ -135,9 +161,15 @@ const Header: React.FC =  () => {
           <Title to="/" className={classes.textDecorationNone}>
             {title}
           </Title>
-          <Title to="/auth">
-            ログイン
-          </Title>
+          {user.uid ? (
+            <Title to="/auth">
+              ろぐあうと
+            </Title>
+          ) : (
+            <Title to="/auth">
+              ログイン
+            </Title>
+          )}
         </Toolbar>
       </AppBar>
 
