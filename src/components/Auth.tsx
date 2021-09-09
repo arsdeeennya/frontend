@@ -131,12 +131,7 @@ const Auth: React.FC = () => {
     await authUser.user?.updateProfile({
       displayName: username,
       photoURL: url,
-    }).then(() => {
-      alert(1111);
-      // ...
-    }).catch((error) => {
-      alert(2222);
-    });  
+    });
     dispatch(
       updateUserProfile({
         displayName: username,
