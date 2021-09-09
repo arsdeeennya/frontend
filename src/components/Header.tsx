@@ -130,13 +130,7 @@ const Header: React.FC = () => {
     setTitle("海外移住ちゃんねる");
   };
 
-  const toggleDrawer = () => (event: any) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
+  const toggleDrawer = () => {
     setTitle("海外移住ちゃんねる");
     setOpen(false);
   };
@@ -163,7 +157,13 @@ const Header: React.FC = () => {
             {title}
           </Title>
           {user.uid ? (
-            <Title to="/auth">ろぐあうと</Title>
+            <div
+              onClick={async () => {
+                await auth.signOut();
+              }}
+            >
+              ろぐあうと
+            </div>
           ) : (
             <Title to="/auth">ログイン</Title>
           )}
@@ -176,7 +176,7 @@ const Header: React.FC = () => {
         anchor="left"
         transitionDuration={300}
         open={open}
-        onClose={toggleDrawer()}
+        onClose={toggleDrawer}
         classes={{
           paper: classes.drawerPaper,
         }}

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { updateUserProfile } from "../features/userSlice";
 import styles from "./Auth.module.css";
 import { auth, provider, storage } from "../service/firebase";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { selectUser, login, logout } from "../features/userSlice";
+import Home from "./Home";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {
   Avatar,
@@ -22,7 +25,6 @@ import {
 
 import SendIcon from "@material-ui/icons/Send";
 import EmailIcon from "@material-ui/icons/Email";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 function getModalStyle() {
   const top = 50;
@@ -129,7 +131,12 @@ const Auth: React.FC = () => {
     await authUser.user?.updateProfile({
       displayName: username,
       photoURL: url,
-    });
+    }).then(() => {
+      alert(1111);
+      // ...
+    }).catch((error) => {
+      alert(2222);
+    });  
     dispatch(
       updateUserProfile({
         displayName: username,
@@ -138,193 +145,231 @@ const Auth: React.FC = () => {
     );
   };
 
+  const user = useSelector(selectUser);
+
+  useEffect(() => {
+    const unSub = auth.onAuthStateChanged((authUser) => {
+      if (authUser) {
+        dispatch(
+          login({
+            uid: authUser.uid,
+            photoUrl: authUser.photoURL,
+            displayName: authUser.displayName,
+          })
+        );
+      } else {
+        dispatch(logout());
+      }
+    });
+    return () => {
+      unSub();
+    };
+  }, [dispatch]);
+
   return (
-    <Grid container component="main" className={classes.root}>
-      <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            {isLogin ? "Login" : "Register"}
-          </Typography>
-          <form className={classes.form} noValidate>
-            {!isLogin && (
-              <>
+    <>
+      {user.uid ? (
+        <Home />
+      ) : (
+        <Grid container component="main" className={classes.root}>
+          <CssBaseline />
+          <Grid item xs={false} sm={4} md={7} className={classes.image} />
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={5}
+            component={Paper}
+            elevation={6}
+            square
+          >
+            <div className={classes.paper}>
+              <Avatar className={classes.avatar}>
+                <ExitToAppIcon />
+              </Avatar>
+              <Typography component="h1" variant="h5">
+                {isLogin ? "Login" : "Register"}
+              </Typography>
+              <form className={classes.form} noValidate>
+                {!isLogin && (
+                  <>
+                    <TextField
+                      variant="outlined"
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="username"
+                      label="Username"
+                      name="username"
+                      autoComplete="username"
+                      autoFocus
+                      value={username}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setUsername(e.target.value);
+                      }}
+                    />
+                    <Box textAlign="center">
+                      <IconButton>
+                        <label>
+                          <AccountCircleIcon
+                            fontSize="large"
+                            className={
+                              avatarImage
+                                ? styles.login_addIconLoaded
+                                : styles.login_addIcon
+                            }
+                          />
+                          <input
+                            className={styles.login_hiddenIcon}
+                            type="file"
+                            onChange={onChangeImageHandler}
+                          />
+                        </label>
+                      </IconButton>
+                    </Box>
+                  </>
+                )}
                 <TextField
                   variant="outlined"
                   margin="normal"
                   required
                   fullWidth
-                  id="username"
-                  label="Username"
-                  name="username"
-                  autoComplete="username"
-                  autoFocus
-                  value={username}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setUsername(e.target.value);
-                  }}
-                />
-                <Box textAlign="center">
-                  <IconButton>
-                    <label>
-                      <AccountCircleIcon
-                        fontSize="large"
-                        className={
-                          avatarImage
-                            ? styles.login_addIconLoaded
-                            : styles.login_addIcon
-                        }
-                      />
-                      <input
-                        className={styles.login_hiddenIcon}
-                        type="file"
-                        onChange={onChangeImageHandler}
-                      />
-                    </label>
-                  </IconButton>
-                </Box>
-              </>
-            )}
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setEmail(e.target.value);
-              }}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              value={password}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setPassword(e.target.value);
-              }}
-            />
-
-            <Button
-              disabled={
-                isLogin
-                  ? !email || password.length < 6
-                  : !username || !email || password.length < 6 || !avatarImage
-              }
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              startIcon={<EmailIcon />}
-              onClick={
-                isLogin
-                  ? async () => {
-                      try {
-                        await signInEmail();
-                      } catch (err) {
-                        alert(err.message);
-                      }
-                    }
-                  : async () => {
-                      try {
-                        await signUpEmail();
-                      } catch (err) {
-                        alert(err.message);
-                      }
-                    }
-              }
-            >
-              {isLogin ? "Login" : "Register"}
-            </Button>
-            <Grid container>
-              <Grid item xs>
-                <span
-                  className={styles.login_reset}
-                  onClick={() => setOpenModal(true)}
-                >
-                  Forgot password ?
-                </span>
-              </Grid>
-              <Grid item>
-                <span
-                  className={styles.login_toggleMode}
-                  onClick={() => setIsLogin(!isLogin)}
-                >
-                  {isLogin ? "Create new account ?" : "Back to login"}
-                </span>
-              </Grid>
-            </Grid>
-
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              startIcon={<FcGoogle />}
-              onClick={signInGoogle}
-            >
-              SignIn with Google
-            </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              startIcon={<FaFacebook />}
-              onClick={signInGoogle}
-            >
-              SignIn with Google
-            </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="primary"
-              className={classes.submit}
-              startIcon={<FaTwitter />}
-              onClick={signInGoogle}
-            >
-              SignIn with Google
-            </Button>
-          </form>
-
-          <Modal open={openModal} onClose={() => setOpenModal(false)}>
-            <div style={getModalStyle()} className={classes.modal}>
-              <div className={styles.login_modal}>
-                <TextField
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  type="email"
+                  id="email"
+                  label="Email Address"
                   name="email"
-                  label="Reset E-mail"
-                  value={resetEmail}
+                  autoComplete="email"
+                  value={email}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setResetEmail(e.target.value);
+                    setEmail(e.target.value);
                   }}
                 />
-                <IconButton onClick={sendResetEmail}>
-                  <SendIcon />
-                </IconButton>
-              </div>
+                <TextField
+                  variant="outlined"
+                  margin="normal"
+                  required
+                  fullWidth
+                  name="password"
+                  label="Password"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  value={password}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+
+                <Button
+                  disabled={
+                    isLogin
+                      ? !email || password.length < 6
+                      : !username ||
+                        !email ||
+                        password.length < 6 ||
+                        !avatarImage
+                  }
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  startIcon={<EmailIcon />}
+                  onClick={
+                    isLogin
+                      ? async () => {
+                          try {
+                            await signInEmail();
+                          } catch (err) {
+                            alert(err.message);
+                          }
+                        }
+                      : async () => {
+                          try {
+                            await signUpEmail();
+                          } catch (err) {
+                            alert(err.message);
+                          }
+                        }
+                  }
+                >
+                  {isLogin ? "Login" : "Register"}
+                </Button>
+                <Grid container>
+                  <Grid item xs>
+                    <span
+                      className={styles.login_reset}
+                      onClick={() => setOpenModal(true)}
+                    >
+                      Forgot password ?
+                    </span>
+                  </Grid>
+                  <Grid item>
+                    <span
+                      className={styles.login_toggleMode}
+                      onClick={() => setIsLogin(!isLogin)}
+                    >
+                      {isLogin ? "Create new account ?" : "Back to login"}
+                    </span>
+                  </Grid>
+                </Grid>
+
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  startIcon={<FcGoogle />}
+                  onClick={signInGoogle}
+                >
+                  SignIn with Google
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  startIcon={<FaFacebook />}
+                  onClick={signInGoogle}
+                >
+                  SignIn with Google
+                </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  startIcon={<FaTwitter />}
+                  onClick={signInGoogle}
+                >
+                  SignIn with Google
+                </Button>
+              </form>
+
+              <Modal open={openModal} onClose={() => setOpenModal(false)}>
+                <div style={getModalStyle()} className={classes.modal}>
+                  <div className={styles.login_modal}>
+                    <TextField
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      type="email"
+                      name="email"
+                      label="Reset E-mail"
+                      value={resetEmail}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setResetEmail(e.target.value);
+                      }}
+                    />
+                    <IconButton onClick={sendResetEmail}>
+                      <SendIcon />
+                    </IconButton>
+                  </div>
+                </div>
+              </Modal>
             </div>
-          </Modal>
-        </div>
-      </Grid>
-    </Grid>
+          </Grid>
+        </Grid>
+      )}
+    </>
   );
 };
 export default Auth;
