@@ -3,8 +3,8 @@ import { useDispatch } from "react-redux";
 import { updateUserProfile } from "../features/userSlice";
 import styles from "./Auth.module.css";
 import { auth, provider, storage } from "../service/firebase";
-import { FcGoogle } from "react-icons/fc"
-import { FaFacebook, FaTwitter } from "react-icons/fa"
+import { FcGoogle } from "react-icons/fc";
+import { FaFacebook, FaTwitter } from "react-icons/fa";
 
 import {
   Avatar,

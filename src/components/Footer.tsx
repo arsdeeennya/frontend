@@ -1,19 +1,18 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Link from '@material-ui/core/Link';
+import React from "react";
+import Typography from "@material-ui/core/Typography";
+import { makeStyles } from "@material-ui/core/styles";
+import Link from "@material-ui/core/Link";
 
-const Footer: React.FC =  () => {
-
+const Footer: React.FC = () => {
   function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
-        {'Copyright © '}
+        {"Copyright © "}
         <Link color="inherit" href="https://material-ui.com/">
           Your Website
-        </Link>{' '}
+        </Link>{" "}
         {new Date().getFullYear()}
-        {'.'}
+        {"."}
       </Typography>
     );
   }
@@ -25,7 +24,6 @@ const Footer: React.FC =  () => {
     },
   }));
 
-
   const classes = useStyles();
 
   return (
@@ -34,7 +32,12 @@ const Footer: React.FC =  () => {
         <Typography variant="h6" align="center" gutterBottom>
           海外移住ちゃんねる
         </Typography>
-        <Typography variant="subtitle1" align="center" color="textSecondary" component="p">
+        <Typography
+          variant="subtitle1"
+          align="center"
+          color="textSecondary"
+          component="p"
+        >
           ご利用は利用者各位のご判断にお任せしています｜
           コンテンツの無断複写、転載を禁じます。
         </Typography>
@@ -42,6 +45,6 @@ const Footer: React.FC =  () => {
       </footer>
     </React.Fragment>
   );
-}
+};
 
 export default Footer;

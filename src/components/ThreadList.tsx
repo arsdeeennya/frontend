@@ -1,23 +1,23 @@
-import React, { useEffect, useCallback, Dispatch, SetStateAction } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import styled from 'styled-components';
-import Moment from 'react-moment';
-import { bbsGet } from "../service/api"
+import React, { useEffect, useCallback, Dispatch, SetStateAction } from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import styled from "styled-components";
+import Moment from "react-moment";
+import { bbsGet } from "../service/api";
 
 type PostType = {
   name: string;
   comment: string;
   created_at: any;
-}
+};
 
 type PROPS = {
   posts: PostType[];
   setPosts: Dispatch<SetStateAction<Array<PostType>>>;
-}
+};
 
 const Bold = styled.b`
   color: #3f51b5;
-`
+`;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       flexGrow: 1,
     },
-  }),
+  })
 );
 
 const Post = styled.div`
@@ -38,53 +38,50 @@ const Post = styled.div`
   border-radius: 5px;
   border-style: none solid solid none;
   border-color: #ddd;
-`
+`;
 const Comment = styled.div`
   padding: 12px 0px;
-`
+`;
 
 const ThreadList: React.FC<PROPS> = (props) => {
   const classes = useStyles();
 
-  const fetch = useCallback(
-    async() => {
-      const data = await bbsGet();
-      props.setPosts(data);
-    },
-    [props],
-  )
-  
-  useEffect(()=>{
+  const fetch = useCallback(async () => {
+    const data = await bbsGet();
+    props.setPosts(data);
+  }, [props]);
+
+  useEffect(() => {
     fetch();
     return () => {
       // Unmount時の処理を記述
-    }; 
-  }, [fetch])
+    };
+  }, [fetch]);
 
   return (
     <React.Fragment>
       <div className={classes.root}>
-        {props.posts.map((post:PostType , index: number) => (
+        {props.posts.map((post: PostType, index: number) => (
           <div key={index}>
             <Post>
-            <div>
-              <span>{index+1}.  </span>
-              <span>
-                <Bold>{post.name} </Bold>
-              </span>
-              <Moment format="YYYY年MM月DD日 HH:mm:ss ">
-                {new Date(post.created_at?.toDate()).toLocaleString()}
-              </Moment>
-            </div>
-            <Comment>
-              <span>{post.comment}</span>
-            </Comment>
-          </Post>
+              <div>
+                <span>{index + 1}. </span>
+                <span>
+                  <Bold>{post.name} </Bold>
+                </span>
+                <Moment format="YYYY年MM月DD日 HH:mm:ss ">
+                  {new Date(post.created_at?.toDate()).toLocaleString()}
+                </Moment>
+              </div>
+              <Comment>
+                <span>{post.comment}</span>
+              </Comment>
+            </Post>
           </div>
         ))}
       </div>
     </React.Fragment>
   );
-}
+};
 
 export default ThreadList;

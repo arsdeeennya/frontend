@@ -1,23 +1,22 @@
-import React, { useEffect } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import CommentIcon from '@material-ui/icons/Comment';
-import Toolbar from '@material-ui/core/Toolbar';
-import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import grey from '@material-ui/core/colors/grey';
-import styled from 'styled-components'
+import React, { useEffect } from "react";
+import AppBar from "@material-ui/core/AppBar";
+import Button from "@material-ui/core/Button";
+import CommentIcon from "@material-ui/icons/Comment";
+import Toolbar from "@material-ui/core/Toolbar";
+import { makeStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
+import grey from "@material-ui/core/colors/grey";
+import styled from "styled-components";
 import Modal from "react-modal";
-import ForumIcon from '@material-ui/icons/Forum';
-import MenuIcon from '@material-ui/icons/Menu';
-import clsx from 'clsx';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import IconButton from '@material-ui/core/IconButton';
+import ForumIcon from "@material-ui/icons/Forum";
+import MenuIcon from "@material-ui/icons/Menu";
+import clsx from "clsx";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import IconButton from "@material-ui/core/IconButton";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, login, logout } from "../features/userSlice";
 import { auth } from "../service/firebase";
-
 
 Modal.setAppElement("#root");
 
@@ -26,40 +25,39 @@ const drawerWidth = 240;
 const DrawerButton = styled(Button)`
   font-size: 20px;
   padding: 15px 82px 15px 36px;
-`
+`;
 const Title = styled(Link)`
   color: white;
-  fontWeight: bold;
-`
+  fontweight: bold;
+`;
 const ButtonMS = styled(IconButton)`
   color: white;
-  fontWeight: bold;
-`
+  fontweight: bold;
+`;
 
-const Header: React.FC =  () => {
-
+const Header: React.FC = () => {
   const useStyles = makeStyles((theme) => ({
     white: {
       color: grey[50],
     },
     textDecorationNone: {
-      textDecoration: 'none',
-      fontWeight: 'bold',
-      color: 'white',
+      textDecoration: "none",
+      fontWeight: "bold",
+      color: "white",
       flexGrow: 1,
     },
     header: {
-      textDecoration: 'none',
-      display: 'block',
+      textDecoration: "none",
+      display: "block",
       "&:hover": {
-        backgroundColor: '#f2f3f7',
+        backgroundColor: "#f2f3f7",
       },
     },
     root: {
-      display: 'flex',
+      display: "flex",
     },
     appBar: {
-      transition: theme.transitions.create(['margin', 'width'], {
+      transition: theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       }),
@@ -67,7 +65,7 @@ const Header: React.FC =  () => {
     appBarShift: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
-      transition: theme.transitions.create(['margin', 'width'], {
+      transition: theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
@@ -76,7 +74,7 @@ const Header: React.FC =  () => {
       marginRight: theme.spacing(2),
     },
     hide: {
-      display: 'none',
+      display: "none",
     },
     drawer: {
       width: drawerWidth,
@@ -86,12 +84,12 @@ const Header: React.FC =  () => {
       width: drawerWidth,
     },
     drawerHeader: {
-      display: 'flex',
-      alignItems: 'center',
+      display: "flex",
+      alignItems: "center",
       padding: theme.spacing(0, 1),
       ...theme.mixins.toolbar,
-      justifyContent: 'center',
-      backgroundColor: '#3f51b5',
+      justifyContent: "center",
+      backgroundColor: "#3f51b5",
     },
   }));
 
@@ -120,34 +118,37 @@ const Header: React.FC =  () => {
   }, [dispatch]);
 
   const [open, setOpen] = React.useState(false);
-  const [title, setTitle] = React.useState('海外移住ちゃんねる');
+  const [title, setTitle] = React.useState("海外移住ちゃんねる");
 
   const handleDrawerOpen = () => {
     setOpen(true);
-    setTitle('');
+    setTitle("");
   };
 
   const handleDrawerClose = () => {
     setOpen(false);
-    setTitle('海外移住ちゃんねる');
+    setTitle("海外移住ちゃんねる");
   };
 
   const toggleDrawer = () => (event: any) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
       return;
     }
-    setTitle('海外移住ちゃんねる');
+    setTitle("海外移住ちゃんねる");
     setOpen(false);
   };
 
-  const cards= [{title: '掲示板', icon: <CommentIcon fontSize="large"/>, url: '/thread'},
-                {title: 'チャット', icon: <ForumIcon fontSize="large"/>, url: '/chat'}];
+  const cards = [
+    { title: "掲示板", icon: <CommentIcon fontSize="large" />, url: "/thread" },
+    { title: "チャット", icon: <ForumIcon fontSize="large" />, url: "/chat" },
+  ];
 
   return (
     <React.Fragment>
-      <AppBar
-        position="fixed"
-      >
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -162,13 +163,9 @@ const Header: React.FC =  () => {
             {title}
           </Title>
           {user.uid ? (
-            <Title to="/auth">
-              ろぐあうと
-            </Title>
+            <Title to="/auth">ろぐあうと</Title>
           ) : (
-            <Title to="/auth">
-              ログイン
-            </Title>
+            <Title to="/auth">ログイン</Title>
           )}
         </Toolbar>
       </AppBar>
@@ -188,23 +185,29 @@ const Header: React.FC =  () => {
           <ButtonMS onClick={handleDrawerClose}>
             <MenuIcon />
           </ButtonMS>
-          <Link to="/" onClick={handleDrawerClose} className={classes.textDecorationNone}>
+          <Link
+            to="/"
+            onClick={handleDrawerClose}
+            className={classes.textDecorationNone}
+          >
             海外移住ちゃんねる
           </Link>
         </div>
         <List>
           {cards.map((card, index: number) => (
-            <Link to={card.url} onClick={handleDrawerClose} className={classes.header} key={index}>
-              <DrawerButton startIcon={card.icon}>
-                {card.title}
-              </DrawerButton>
+            <Link
+              to={card.url}
+              onClick={handleDrawerClose}
+              className={classes.header}
+              key={index}
+            >
+              <DrawerButton startIcon={card.icon}>{card.title}</DrawerButton>
             </Link>
           ))}
         </List>
       </Drawer>
-
     </React.Fragment>
   );
-}
+};
 
 export default Header;
