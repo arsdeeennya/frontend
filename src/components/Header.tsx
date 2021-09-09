@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, login, logout } from "../features/userSlice";
 import { auth } from "../service/firebase";
+import { Avatar } from "@material-ui/core";
 
 Modal.setAppElement("#root");
 
@@ -91,6 +92,9 @@ const Header: React.FC = () => {
       justifyContent: "center",
       backgroundColor: "#3f51b5",
     },
+    avatar: {
+      cursor: "pointer",
+    },
   }));
 
   const classes = useStyles();
@@ -157,13 +161,13 @@ const Header: React.FC = () => {
             {title}
           </Title>
           {user.uid ? (
-            <div
-              onClick={async () => {
-                await auth.signOut();
-              }}
-            >
-              ろぐあうと
-            </div>
+            <Avatar
+            className={classes.avatar}
+            src={user.photoUrl}
+            onClick={async () => {
+              await auth.signOut();
+            }}
+          />
           ) : (
             <Title to="/auth">ログイン</Title>
           )}

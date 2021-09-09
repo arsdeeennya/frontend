@@ -31,5 +31,6 @@ __generated__
 .env.*.local
 .eslintcache
 .yarn-integrity
+.memo
 backup.sql
 VERSION
