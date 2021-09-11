@@ -4,7 +4,7 @@ import { updateUserProfile } from "../features/userSlice";
 import styles from "./Auth.module.css";
 import { auth, provider, storage } from "../service/firebase";
 import { FcGoogle } from "react-icons/fc";
-import { FaFacebook, FaTwitter } from "react-icons/fa";
+// import { FaFacebook, FaTwitter } from "react-icons/fa";
 import { selectUser, login, logout } from "../features/userSlice";
 import Home from "./Home";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
@@ -317,7 +317,7 @@ const Auth: React.FC = () => {
                 >
                   SignIn with Google
                 </Button>
-                <Button
+                {/* <Button
                   fullWidth
                   variant="contained"
                   color="primary"
@@ -336,7 +336,7 @@ const Auth: React.FC = () => {
                   onClick={signInGoogle}
                 >
                   SignIn with Google
-                </Button>
+                </Button> */}
               </form>
 
               <Modal open={openModal} onClose={() => setOpenModal(false)}>

@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { Link } from "react-router-dom";
 import CommentIcon from "@material-ui/icons/Comment";
-import ForumIcon from "@material-ui/icons/Forum";
+// import ForumIcon from "@material-ui/icons/Forum";
 
 const Main = styled.main`
   background-color: #f2f3f7;
@@ -67,7 +67,7 @@ const Home: React.FC = () => {
   const classes = useStyles();
   const cards = [
     { title: "掲示板", icon: <CommentIcon fontSize="large" />, url: "/thread" },
-    { title: "チャット", icon: <ForumIcon fontSize="large" />, url: "/chat" },
+    // { title: "チャット", icon: <ForumIcon fontSize="large" />, url: "/chat" },
   ];
 
   return (
