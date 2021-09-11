@@ -7,7 +7,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook, FaTwitter } from "react-icons/fa";
 import { selectUser, login, logout } from "../features/userSlice";
 import Home from "./Home";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 
 import {
   Avatar,
@@ -273,14 +273,14 @@ const Auth: React.FC = () => {
                       ? async () => {
                           try {
                             await signInEmail();
-                          } catch (err) {
+                          } catch (err: any) {
                             alert(err.message);
                           }
                         }
                       : async () => {
                           try {
                             await signUpEmail();
-                          } catch (err) {
+                          } catch (err: any) {
                             alert(err.message);
                           }
                         }
