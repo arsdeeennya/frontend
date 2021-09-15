@@ -17,7 +17,15 @@ import IconButton from "@material-ui/core/IconButton";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, login, logout } from "../features/userSlice";
 import { auth } from "../service/firebase";
+
 import { Avatar } from "@material-ui/core";
+import ClickAwayListener from "@material-ui/core/ClickAwayListener";
+import Grow from "@material-ui/core/Grow";
+import Paper from "@material-ui/core/Paper";
+import Popper from "@material-ui/core/Popper";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import { Theme } from "@material-ui/core/styles";
 
 Modal.setAppElement("#root");
 
@@ -37,7 +45,7 @@ const ButtonMS = styled(IconButton)`
 `;
 
 const Header: React.FC = () => {
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles((theme: Theme) => ({
     white: {
       color: grey[50],
     },
@@ -95,6 +103,9 @@ const Header: React.FC = () => {
     avatar: {
       cursor: "pointer",
     },
+    paper: {
+      marginRight: theme.spacing(2),
+    },
   }));
 
   const classes = useStyles();
@@ -123,6 +134,8 @@ const Header: React.FC = () => {
 
   const [open, setOpen] = React.useState(false);
   const [title, setTitle] = React.useState("海外移住ちゃんねる");
+  const [openMenu, setOpenmenu] = React.useState(false);
+  const anchorRef = React.useRef<HTMLButtonElement>(null);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -138,6 +151,38 @@ const Header: React.FC = () => {
     setTitle("海外移住ちゃんねる");
     setOpen(false);
   };
+
+  const handleToggle = () => {
+    setOpenmenu((prevOpen) => !prevOpen);
+  };
+
+  const handleClose = (event: React.MouseEvent<EventTarget>) => {
+    if (
+      anchorRef.current &&
+      anchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setOpenmenu(false);
+  };
+
+  function handleListKeyDown(event: React.KeyboardEvent) {
+    if (event.key === "Tab") {
+      event.preventDefault();
+      setOpenmenu(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(openMenu);
+  React.useEffect(() => {
+    if (prevOpen.current === true && openMenu === false) {
+      anchorRef.current!.focus();
+    }
+
+    prevOpen.current = openMenu;
+  }, [openMenu]);
 
   const cards = [
     { title: "掲示板", icon: <CommentIcon fontSize="large" />, url: "/thread" },
@@ -161,17 +206,99 @@ const Header: React.FC = () => {
             {title}
           </Title>
           {user.uid ? (
-            <Avatar
-              className={classes.avatar}
-              src={user.photoUrl}
-              onClick={async () => {
-                await auth.signOut();
-              }}
-            />
+            <div>
+              <Button
+                ref={anchorRef}
+                aria-controls={open ? "menu-list-grow" : undefined}
+                aria-haspopup="true"
+              >
+                <Avatar
+                  className={classes.avatar}
+                  src={user.photoUrl}
+                  onClick={handleToggle}
+                />
+              </Button>
+              <Popper
+                open={openMenu}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom" ? "center top" : "center bottom",
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <MenuList
+                          autoFocusItem={openMenu}
+                          id="menu-list-grow"
+                          onKeyDown={handleListKeyDown}
+                        >
+                          <MenuItem
+                            onClick={async () => {
+                              await auth.signOut();
+                            }}
+                          >
+                            ログアウト
+                          </MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </div>
           ) : (
             <Title to="/auth">ログイン</Title>
           )}
         </Toolbar>
+        {/* <div>
+          <Button
+            ref={anchorRef}
+            aria-controls={open ? "menu-list-grow" : undefined}
+            aria-haspopup="true"
+            onClick={handleToggle}
+          >
+            Toggle Menu Grow
+          </Button>
+          <Popper
+            open={openMenu}
+            anchorEl={anchorRef.current}
+            role={undefined}
+            transition
+            disablePortal
+          >
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                style={{
+                  transformOrigin:
+                    placement === "bottom" ? "center top" : "center bottom",
+                }}
+              >
+                <Paper>
+                  <ClickAwayListener onClickAway={handleClose}>
+                    <MenuList
+                      autoFocusItem={openMenu}
+                      id="menu-list-grow"
+                      onKeyDown={handleListKeyDown}
+                    >
+                      <MenuItem onClick={handleClose}>Profile</MenuItem>
+                      <MenuItem onClick={handleClose}>My account</MenuItem>
+                      <MenuItem onClick={handleClose}>Logout</MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+                </Paper>
+              </Grow>
+            )}
+          </Popper>
+        </div> */}
       </AppBar>
 
       <Drawer
