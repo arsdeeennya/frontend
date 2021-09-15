@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Button from "@material-ui/core/Button";
 import CommentIcon from "@material-ui/icons/Comment";
@@ -132,10 +132,10 @@ const Header: React.FC = () => {
     };
   }, [dispatch]);
 
-  const [open, setOpen] = React.useState(false);
-  const [title, setTitle] = React.useState("海外移住ちゃんねる");
-  const [openMenu, setOpenmenu] = React.useState(false);
-  const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("海外移住ちゃんねる");
+  const [openMenu, setOpenmenu] = useState(false);
+  const anchorRef = useRef<HTMLButtonElement>(null);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -175,8 +175,8 @@ const Header: React.FC = () => {
   }
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(openMenu);
-  React.useEffect(() => {
+  const prevOpen = useRef(openMenu);
+  useEffect(() => {
     if (prevOpen.current === true && openMenu === false) {
       anchorRef.current!.focus();
     }
