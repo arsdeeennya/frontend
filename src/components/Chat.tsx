@@ -1,10 +1,24 @@
-import ForumIcon from "@material-ui/icons/Forum";
+import React from "react";
+import Container from "@material-ui/core/Container";
+import styled from "styled-components";
+
+// import ForumIcon from "@material-ui/icons/Forum";
+
+const Main = styled.main`
+  background-color: #f2f3f7;
+  padding: 70px 0px 100px;
+`;
 
 const Chat: React.FC = () => {
   return (
-    <h1 style={{ textAlign: "center", color: "#3f51b5" }}>
-      <ForumIcon /> なし。aaaaaaaaa <ForumIcon />
-    </h1>
+    <React.Fragment>
+      <Main>
+        <Container>
+          <h2>チャット</h2>
+
+        </Container>
+      </Main>
+    </React.Fragment>
   );
 };
 

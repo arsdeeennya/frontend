@@ -22,6 +22,7 @@ const Thread: React.FC = () => {
     <React.Fragment>
       <Main>
         <Container>
+          <h2>掲示板</h2>
           <ThreadList posts={posts} setPosts={setPosts} />
           <ThreadForm setPosts={setPosts} />
         </Container>

@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import grey from "@material-ui/core/colors/grey";
 import styled from "styled-components";
 import Modal from "react-modal";
-// import ForumIcon from "@material-ui/icons/Forum";
+import ForumIcon from "@material-ui/icons/Forum";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
@@ -186,7 +186,7 @@ const Header: React.FC = () => {
 
   const cards = [
     { title: "掲示板", icon: <CommentIcon fontSize="large" />, url: "/thread" },
-    // { title: "チャット", icon: <ForumIcon fontSize="large" />, url: "/chat" },
+    { title: "チャット", icon: <ForumIcon fontSize="large" />, url: "/chat" },
   ];
 
   return (
