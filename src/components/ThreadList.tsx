@@ -49,14 +49,14 @@ const ThreadList: React.FC<PROPS> = (props) => {
   const fetch = useCallback(async () => {
     const data = await bbsGet();
     props.setPosts(data);
-  }, [props]);
+  }, []);
 
   useEffect(() => {
     fetch();
     return () => {
       // Unmount時の処理を記述
     };
-  }, [fetch]);
+  }, []);
 
   return (
     <React.Fragment>
@@ -69,9 +69,10 @@ const ThreadList: React.FC<PROPS> = (props) => {
                 <span>
                   <Bold>{post.name} </Bold>
                 </span>
-                <Moment format="YYYY-MM-DD HH:mm:ss ">
+                <Moment format="YYYY年MM月DD日 HH:mm:ss">
                   {new Date(post.created_at?.toDate()).toLocaleString()}
                 </Moment>
+                <span> </span>
               </div>
               <Comment>
                 <span>{post.comment}</span>
