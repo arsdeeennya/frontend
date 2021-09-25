@@ -1,7 +1,6 @@
-import React, { useEffect, useCallback, Dispatch, SetStateAction } from "react";
+import React, { useEffect, Dispatch, SetStateAction } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import styled from "styled-components";
-import Moment from "react-moment";
 import { bbsGet } from "../service/api";
 
 type PostType = {
@@ -46,16 +45,13 @@ const Comment = styled.div`
 const ThreadList: React.FC<PROPS> = (props) => {
   const classes = useStyles();
 
-  const fetch = useCallback(async () => {
+  const fetch = async () => {
     const data = await bbsGet();
     props.setPosts(data);
-  }, []);
+  };
 
   useEffect(() => {
     fetch();
-    return () => {
-      // Unmount時の処理を記述
-    };
   }, []);
 
   return (
@@ -69,9 +65,7 @@ const ThreadList: React.FC<PROPS> = (props) => {
                 <span>
                   <Bold>{post.name} </Bold>
                 </span>
-                <Moment format="YYYY年MM月DD日 HH:mm:ss">
                   {new Date(post.created_at?.toDate()).toLocaleString()}
-                </Moment>
                 <span> </span>
               </div>
               <Comment>
