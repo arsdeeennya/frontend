@@ -10,17 +10,14 @@ import { Route, BrowserRouter } from "react-router-dom";
 
 function App() {
   return (
-    <React.StrictMode>
-      <BrowserRouter>
-        　
-        <Header />
-        <Route exact path="/" component={Home} />
-        <Route exact path="/thread" component={Thread} />
-        {/* <Route exact path="/chat" component={Chat} /> */}
-        <Route exact path="/auth" component={Auth} />
-        {/* <Route exact path="/dev" component={Dev} /> */}
-      </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+      <Header />
+      <Route exact path="/" component={Home} />
+      <Route exact path="/thread" component={Thread} />
+      {/* <Route exact path="/chat" component={Chat} /> */}
+      <Route exact path="/auth" component={Auth} />
+      {/* <Route exact path="/dev" component={Dev} /> */}
+    </BrowserRouter>
   );
 }
 
