@@ -69,7 +69,7 @@ const ThreadList: React.FC<PROPS> = (props) => {
                 <span>
                   <Bold>{post.name} </Bold>
                 </span>
-                <Moment format="YYYY年MM月DD日 HH:mm:ss ">
+                <Moment format="YYYY-MM-DD HH:mm:ss ">
                   {new Date(post.created_at?.toDate()).toLocaleString()}
                 </Moment>
               </div>
