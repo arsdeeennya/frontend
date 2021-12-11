@@ -1,23 +1,18 @@
-import { db } from "./firebase"
+import { db } from './firebase';
+import { PostListItemModel } from '../models/firebase';
 
-type PostType = {
-  name: string;
-  comment: string;
-  created_at: any;
-}
+export const bbsGet = async () => {
+  const bbs = await db.collection('bbs').orderBy('created_at', 'asc');
+  return bbs.get().then(snapShot => {
+    let bbss: PostListItemModel[] = [];
 
-export const bbsGet = async() => {
-  const bbs = await db.collection("bbs").orderBy("created_at", "asc");
-  return bbs.get().then((snapShot) => {
-    let bbss:PostType[] = [];
-
-    snapShot.forEach((doc) => {
+    snapShot.forEach(doc => {
       bbss.push({
         name: doc.data().name,
         comment: doc.data().comment,
-        created_at: doc.data().created_at,
+        created_at: doc.data().created_at
       });
     });
-    return bbss ;
+    return bbss;
   });
-}
+};

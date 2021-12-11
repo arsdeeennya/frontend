@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import Container from "@material-ui/core/Container";
-import styled from "styled-components";
-import ThreadList from "./ThreadList";
-import ThreadForm from "./ThreadForm";
+import React, { useState } from 'react';
+import Container from '@material-ui/core/Container';
+import styled from 'styled-components';
+import ThreadList from './ThreadList';
+import ThreadForm from './ThreadForm';
 
 type PostType = {
   name: string;

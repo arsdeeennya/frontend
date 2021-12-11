@@ -1,6 +1,7 @@
-import React from "react";
-import Container from "@material-ui/core/Container";
-import styled from "styled-components";
+import React from 'react';
+import Container from '@material-ui/core/Container';
+import styled from 'styled-components';
+import ChatStart from './ChatStart';
 
 // import ForumIcon from "@material-ui/icons/Forum";
 
@@ -15,7 +16,7 @@ const Chat: React.FC = () => {
       <Main>
         <Container>
           <h2>チャット</h2>
-
+          <ChatStart />
         </Container>
       </Main>
     </React.Fragment>

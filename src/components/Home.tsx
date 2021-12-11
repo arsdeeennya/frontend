@@ -1,15 +1,15 @@
-import React from "react";
-import Footer from "./Footer";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import styled from "styled-components";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { Link } from "react-router-dom";
-import CommentIcon from "@material-ui/icons/Comment";
-import ForumIcon from "@material-ui/icons/Forum";
+import React from 'react';
+import Footer from './Footer';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import styled from 'styled-components';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom';
+import CommentIcon from '@material-ui/icons/Comment';
+import ForumIcon from '@material-ui/icons/Forum';
 
 const Main = styled.main`
   background-color: #f2f3f7;
@@ -37,57 +37,57 @@ const IconTitle = styled(Typography)`
 `;
 
 const Home: React.FC = () => {
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(theme => ({
     icon: {
-      marginRight: theme.spacing(2),
+      marginRight: theme.spacing(2)
     },
     heroContent: {
-      padding: theme.spacing(8, 0, 6),
+      padding: theme.spacing(8, 0, 6)
     },
     heroButtons: {
-      marginTop: theme.spacing(4),
+      marginTop: theme.spacing(4)
     },
     cardGrid: {
       paddingTop: theme.spacing(8),
-      paddingBottom: theme.spacing(8),
+      paddingBottom: theme.spacing(8)
     },
     card: {
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column'
     },
     cardMedia: {
-      paddingTop: "56.25%",
+      paddingTop: '56.25%'
     },
     footer: {
       backgroundColor: theme.palette.background.paper,
-      padding: theme.spacing(6),
-    },
+      padding: theme.spacing(6)
+    }
   }));
   const classes = useStyles();
   const cards = [
-    { title: "掲示板", icon: <CommentIcon fontSize="large" />, url: "/thread" },
-    { title: "チャット", icon: <ForumIcon fontSize="large" />, url: "/chat" },
+    { title: '掲示板', icon: <CommentIcon fontSize='large' />, url: '/thread' },
+    { title: 'チャット', icon: <ForumIcon fontSize='large' />, url: '/chat' }
   ];
 
   return (
     <React.Fragment>
       <Main>
         <div className={classes.heroContent}>
-          <Container maxWidth="lg">
+          <Container maxWidth='lg'>
             <Typography
-              component="h1"
-              variant="h2"
-              align="center"
-              color="textPrimary"
+              component='h1'
+              variant='h2'
+              align='center'
+              color='textPrimary'
               gutterBottom
             >
               海外移住ちゃんねる
             </Typography>
             <Description
-              variant="h5"
-              align="center"
-              color="textSecondary"
+              variant='h5'
+              align='center'
+              color='textSecondary'
               paragraph
             >
               日本から飛び出して暮らしてみたい
@@ -101,7 +101,7 @@ const Home: React.FC = () => {
                   <LinkMS to={card.url}>
                     <CardMS className={classes.card}>
                       <CC style={{ padding: 15 }}>
-                        <IconTitle variant="h5">
+                        <IconTitle variant='h5'>
                           {card.icon}
                           {card.title}
                         </IconTitle>
