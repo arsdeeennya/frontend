@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { updateUserProfile } from "../features/userSlice";
-import styles from "./Auth.module.css";
-import { auth, provider, storage } from "../service/firebase";
-import { FcGoogle } from "react-icons/fc";
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { updateUserProfile } from '../features/userSlice';
+import styles from './Auth.module.css';
+import { auth, provider, storage } from '../service/firebase';
+import { FcGoogle } from 'react-icons/fc';
 // import { FaFacebook, FaTwitter } from "react-icons/fa";
-import { selectUser, login, logout } from "../features/userSlice";
-import Home from "./Home";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { selectUser, login, logout } from '../features/userSlice';
+import Home from './Home';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import {
   Avatar,
@@ -20,12 +20,12 @@ import {
   makeStyles,
   Modal,
   IconButton,
-  Box,
-} from "@material-ui/core";
+  Box
+} from '@material-ui/core';
 
-import SendIcon from "@material-ui/icons/Send";
-import EmailIcon from "@material-ui/icons/Email";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import SendIcon from '@material-ui/icons/Send';
+import EmailIcon from '@material-ui/icons/Email';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -33,67 +33,67 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
+    transform: `translate(-${top}%, -${left}%)`
   };
 }
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
-    height: "100vh",
+    height: '100vh'
   },
   modal: {
-    outline: "none",
-    position: "absolute",
+    outline: 'none',
+    position: 'absolute',
     width: 400,
     borderRadius: 10,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(10),
+    padding: theme.spacing(10)
   },
   image: {
     backgroundImage:
-      "url(https://images.unsplash.com/photo-1581784368651-8916092072cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80)",
-    backgroundRepeat: "no-repeat",
+      'url(https://images.unsplash.com/photo-1581784368651-8916092072cf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80)',
+    backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === "light"
+      theme.palette.type === 'light'
         ? theme.palette.grey[50]
         : theme.palette.grey[900],
-    backgroundSize: "cover",
-    backgroundPosition: "center",
+    backgroundSize: 'cover',
+    backgroundPosition: 'center'
   },
   paper: {
     margin: theme.spacing(8, 4),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center'
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
+    width: '100%',
+    marginTop: theme.spacing(1)
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
+    margin: theme.spacing(3, 0, 2)
+  }
 }));
 
 const Auth: React.FC = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [avatarImage, setAvatarImage] = useState<File | null>(null);
   const [isLogin, setIsLogin] = useState(true);
   const [openModal, setOpenModal] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
+  const [resetEmail, setResetEmail] = useState('');
   const onChangeImageHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files![0]) {
       setAvatarImage(e.target.files![0]);
-      e.target.value = "";
+      e.target.value = '';
     }
   };
   const sendResetEmail = async (e: React.MouseEvent<HTMLElement>) => {
@@ -101,41 +101,41 @@ const Auth: React.FC = () => {
       .sendPasswordResetEmail(resetEmail)
       .then(() => {
         setOpenModal(false);
-        setResetEmail("");
+        setResetEmail('');
       })
-      .catch((err) => {
+      .catch(err => {
         alert(err.message);
-        setResetEmail("");
+        setResetEmail('');
       });
   };
   const signInGoogle = async () => {
-    await auth.signInWithPopup(provider).catch((err) => alert(err.message));
+    await auth.signInWithPopup(provider).catch(err => alert(err.message));
   };
   const signInEmail = async () => {
     await auth.signInWithEmailAndPassword(email, password);
   };
   const signUpEmail = async () => {
     const authUser = await auth.createUserWithEmailAndPassword(email, password);
-    let url = "";
+    let url = '';
     if (avatarImage) {
       const S =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
       const N = 16;
       const randomChar = Array.from(crypto.getRandomValues(new Uint32Array(N)))
-        .map((n) => S[n % S.length])
-        .join("");
-      const fileName = randomChar + "_" + avatarImage.name;
+        .map(n => S[n % S.length])
+        .join('');
+      const fileName = randomChar + '_' + avatarImage.name;
       await storage.ref(`avatars/${fileName}`).put(avatarImage);
-      url = await storage.ref("avatars").child(fileName).getDownloadURL();
+      url = await storage.ref('avatars').child(fileName).getDownloadURL();
     }
     await authUser.user?.updateProfile({
       displayName: username,
-      photoURL: url,
+      photoURL: url
     });
     dispatch(
       updateUserProfile({
         displayName: username,
-        photoUrl: url,
+        photoUrl: url
       })
     );
   };
@@ -143,13 +143,13 @@ const Auth: React.FC = () => {
   const user = useSelector(selectUser);
 
   useEffect(() => {
-    const unSub = auth.onAuthStateChanged((authUser) => {
+    const unSub = auth.onAuthStateChanged(authUser => {
       if (authUser) {
         dispatch(
           login({
             uid: authUser.uid,
             photoUrl: authUser.photoURL,
-            displayName: authUser.displayName,
+            displayName: authUser.displayName
           })
         );
       } else {
@@ -166,7 +166,7 @@ const Auth: React.FC = () => {
       {user.uid ? (
         <Home />
       ) : (
-        <Grid container component="main" className={classes.root}>
+        <Grid container component='main' className={classes.root}>
           <CssBaseline />
           <Grid item xs={false} sm={4} md={7} className={classes.image} />
           <Grid
@@ -182,32 +182,32 @@ const Auth: React.FC = () => {
               <Avatar className={classes.avatar}>
                 <ExitToAppIcon />
               </Avatar>
-              <Typography component="h1" variant="h5">
-                {isLogin ? "Login" : "Register"}
+              <Typography component='h1' variant='h5'>
+                {isLogin ? 'Login' : 'Register'}
               </Typography>
               <form className={classes.form} noValidate>
                 {!isLogin && (
                   <>
                     <TextField
-                      variant="outlined"
-                      margin="normal"
+                      variant='outlined'
+                      margin='normal'
                       required
                       fullWidth
-                      id="username"
-                      label="Username"
-                      name="username"
-                      autoComplete="username"
+                      id='username'
+                      label='Username'
+                      name='username'
+                      autoComplete='username'
                       autoFocus
                       value={username}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setUsername(e.target.value);
                       }}
                     />
-                    <Box textAlign="center">
+                    <Box textAlign='center'>
                       <IconButton>
                         <label>
                           <AccountCircleIcon
-                            fontSize="large"
+                            fontSize='large'
                             className={
                               avatarImage
                                 ? styles.login_addIconLoaded
@@ -216,7 +216,7 @@ const Auth: React.FC = () => {
                           />
                           <input
                             className={styles.login_hiddenIcon}
-                            type="file"
+                            type='file'
                             onChange={onChangeImageHandler}
                           />
                         </label>
@@ -225,29 +225,29 @@ const Auth: React.FC = () => {
                   </>
                 )}
                 <TextField
-                  variant="outlined"
-                  margin="normal"
+                  variant='outlined'
+                  margin='normal'
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id='email'
+                  label='Email Address'
+                  name='email'
+                  autoComplete='email'
                   value={email}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setEmail(e.target.value);
                   }}
                 />
                 <TextField
-                  variant="outlined"
-                  margin="normal"
+                  variant='outlined'
+                  margin='normal'
                   required
                   fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
+                  name='password'
+                  label='Password'
+                  type='password'
+                  id='password'
+                  autoComplete='current-password'
                   value={password}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     setPassword(e.target.value);
@@ -264,8 +264,8 @@ const Auth: React.FC = () => {
                         !avatarImage
                   }
                   fullWidth
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   className={classes.submit}
                   startIcon={<EmailIcon />}
                   onClick={
@@ -286,7 +286,7 @@ const Auth: React.FC = () => {
                         }
                   }
                 >
-                  {isLogin ? "Login" : "Register"}
+                  {isLogin ? 'Login' : 'Register'}
                 </Button>
                 <Grid container>
                   <Grid item xs>
@@ -302,15 +302,15 @@ const Auth: React.FC = () => {
                       className={styles.login_toggleMode}
                       onClick={() => setIsLogin(!isLogin)}
                     >
-                      {isLogin ? "Create new account ?" : "Back to login"}
+                      {isLogin ? 'Create new account ?' : 'Back to login'}
                     </span>
                   </Grid>
                 </Grid>
 
                 <Button
                   fullWidth
-                  variant="contained"
-                  color="primary"
+                  variant='contained'
+                  color='primary'
                   className={classes.submit}
                   startIcon={<FcGoogle />}
                   onClick={signInGoogle}
@@ -344,11 +344,11 @@ const Auth: React.FC = () => {
                   <div className={styles.login_modal}>
                     <TextField
                       InputLabelProps={{
-                        shrink: true,
+                        shrink: true
                       }}
-                      type="email"
-                      name="email"
-                      label="Reset E-mail"
+                      type='email'
+                      name='email'
+                      label='Reset E-mail'
                       value={resetEmail}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                         setResetEmail(e.target.value);

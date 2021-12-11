@@ -1,13 +1,13 @@
-import React, { Dispatch, SetStateAction } from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import CreateIcon from "@material-ui/icons/Create";
-import styled from "styled-components";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { bbsGet } from "../service/api";
-import firebase from "firebase/app";
-import "firebase/firestore";
-import { db } from "../service/firebase";
+import React, { Dispatch, SetStateAction } from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import CreateIcon from '@material-ui/icons/Create';
+import styled from 'styled-components';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { bbsGet } from '../service/api';
+import firebase from 'firebase/app';
+import 'firebase/firestore';
+import { db } from '../service/firebase';
 
 type FormInputs = {
   name: string;
@@ -58,11 +58,11 @@ const Write = styled(Button)`
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(1)
     },
     root: {
-      flexGrow: 1,
-    },
+      flexGrow: 1
+    }
   })
 );
 
@@ -73,30 +73,30 @@ const ErrorMsg = styled.span`
 
 const ThreadForm: React.FC<{
   setPosts: Dispatch<SetStateAction<Array<PostType>>>;
-}> = (props) => {
+}> = props => {
   const classes = useStyles();
   const {
     register,
     setValue,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<FormInputs>();
   const onSubmit: SubmitHandler<FormInputs> = (data: FormInputs) => {
-    if (data.name === "") {
-      data.name = "名無しさん";
+    if (data.name === '') {
+      data.name = '名無しさん';
     }
-    db.collection("bbs")
+    db.collection('bbs')
       .add({
         name: data.name,
         comment: data.comment,
-        created_at: firebase.firestore.FieldValue.serverTimestamp(),
+        created_at: firebase.firestore.FieldValue.serverTimestamp()
       })
-      .then((res) => {
-        setValue("name", "");
-        setValue("comment", "");
+      .then(res => {
+        setValue('name', '');
+        setValue('comment', '');
         fetch();
       })
-      .catch((res) => {
+      .catch(res => {
         console.log(res);
       });
   };
@@ -113,23 +113,23 @@ const ThreadForm: React.FC<{
         <form onSubmit={handleSubmit(onSubmit)}>
           {errors.name && <ErrorMsg>名前が長すぎます！</ErrorMsg>}
           <Name
-            {...register("name", { maxLength: 20 })}
-            placeholder={"名前(省略可)"}
+            {...register('name', { maxLength: 20 })}
+            placeholder={'名前(省略可)'}
             size={70}
           />
           {errors.comment && <ErrorMsg>本文がありません！</ErrorMsg>}
           <CommentArea
-            {...register("comment", { required: true })}
-            placeholder={"コメント内容"}
+            {...register('comment', { required: true })}
+            placeholder={'コメント内容'}
             rows={5}
             cols={70}
           />
           <Write
-            variant="contained"
-            color="primary"
+            variant='contained'
+            color='primary'
             className={classes.button}
             endIcon={<CreateIcon />}
-            type="submit"
+            type='submit'
           >
             書き込む
           </Write>

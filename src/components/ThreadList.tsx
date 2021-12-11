@@ -1,7 +1,7 @@
-import React, { useEffect, Dispatch, SetStateAction } from "react";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import styled from "styled-components";
-import { bbsGet } from "../service/api";
+import React, { useEffect, Dispatch, SetStateAction } from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import styled from 'styled-components';
+import { bbsGet } from '../service/api';
 
 type PostType = {
   name: string;
@@ -21,11 +21,11 @@ const Bold = styled.b`
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(1)
     },
     root: {
-      flexGrow: 1,
-    },
+      flexGrow: 1
+    }
   })
 );
 
@@ -42,7 +42,7 @@ const Comment = styled.div`
   padding: 12px 0px;
 `;
 
-const ThreadList: React.FC<PROPS> = (props) => {
+const ThreadList: React.FC<PROPS> = props => {
   const classes = useStyles();
 
   const fetch = async () => {
@@ -65,7 +65,7 @@ const ThreadList: React.FC<PROPS> = (props) => {
                 <span>
                   <Bold>{post.name} </Bold>
                 </span>
-                  {new Date(post.created_at?.toDate()).toLocaleString()}
+                {new Date(post.created_at?.toDate()).toLocaleString()}
                 <span> </span>
               </div>
               <Comment>
